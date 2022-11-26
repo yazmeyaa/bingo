@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import fluidTypography from 'tools/fluidTypography'
 
 export const Container = styled.header`
     &{
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        padding: 6px 0px;
         gap: 8px;
         background-color: papayawhip;
         margin-bottom: 1rem;
@@ -16,9 +17,7 @@ export const Container = styled.header`
 export const Navigation = styled.nav`
     &{
         width: 100%;
-        margin: 0px auto;
         display: flex;
-        justify-content: center;
     }
 `
 export const LinksList = styled.ul`
@@ -27,7 +26,7 @@ export const LinksList = styled.ul`
         padding: 0px;
         margin: 0px;
         display: flex;
-        justify-content: space-evenly;
+        justify-content: space-around;
         list-style-type: none;
     }
     &>li{
@@ -39,9 +38,10 @@ export const LinksList = styled.ul`
 export const LinkedNavText = styled(Link)`
     &{
         text-decoration: underline;
-        font-size: 18px;
+        font-size: ${fluidTypography(320, 1366, 14, 20)};
         font-weight: 600;
         transition: ease-in-out 0.1s;
+        color: black;
     }
     &:visited {
        color: black; 
@@ -52,7 +52,7 @@ export const LinkedNavText = styled(Link)`
 `
 
 export const Title = styled.h1`
-    font-size: 3rem;
+    font-size: ${fluidTypography(320, 1366, 24, 34)};;
     margin: 0px;
     font-variant: small-caps;
 `

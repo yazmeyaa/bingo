@@ -11,9 +11,6 @@ function Template({ children }: TemplateType) {
         <Container>
             <Header />
             {children}
-            <footer>
-                footer!
-            </footer>
         </Container>
     )
 }

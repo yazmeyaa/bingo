@@ -1,28 +1,16 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
+import { Location, useLocation } from "react-router-dom"
 import { BingoField, BingoItem, PageContainer } from "./styles"
-// import axios from 'axios'
 
-// async function fetchBingoValues(bingo_id: number) {
-//     const url = process.env.REACT_APP_BACKEND_URL as string + bingo_id
-//     const response = await axios<string[]>({
-//         url,
-//         method: 'POST',
-//         params: {
-//             bingo_id
-//         }
-//     })
-//     return response
-// }
+interface LocationWithState extends Location {
+    state: {
+        bingoTemplate: string[]
+    }
+}
 
 function Bingo() {
-    const [bingoValues, setBingoValues] = useState<string[]>([])
-    useEffect(() => {
-        // fetchBingoValues(1)
-        //     .then(data => {
-        //         if (data.status === 200) setBingoValues(data.data)
-        //     })
-        setBingoValues(['Дурак', 'Ненавидит работать', 'хочу пива', 'Танцы', 'Пляски', 'Пятница', 'asd', 'dsa', 'dqweqw'])
-    }, [])
+    const location = useLocation() as LocationWithState
+    const [bingoValues, setBingoValues] = useState<string[]>(location.state.bingoTemplate)
     return (
         <PageContainer>
             <BingoTemplate values={bingoValues} />
@@ -30,13 +18,12 @@ function Bingo() {
     )
 }
 
-
 interface BingoFieldProps {
     values: string[]
 }
 
 function BingoTemplate(props: BingoFieldProps) {
-    const Field = props.values.map(item => <BingoItem>{item}</BingoItem>)
+    const Field = props.values.map((item, index) => <BingoItem key={index}>{item}</BingoItem>)
     return (
         <BingoField >
             {Field}
