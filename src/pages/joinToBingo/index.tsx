@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios"
 import { ChangeEvent, FormEvent, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import getBingo from "tools/getBingo"
 import { Container, Description, Form, Input } from "./styles"
 
 
@@ -12,35 +13,7 @@ function JoinToBingo() {
     const [fetching, setFetching] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
 
-    async function getBingo(id: number) {
-        try {
-            setFetching(true)
-            const data = await axios<{ id: number, values: string[] }>({
-                url: `http://localhost:3001/bingo`,
-                method: 'get',
-                params: {
-                    id: id
-                }
-            })
-            return data.data
-        }
-        catch (error) {
-            if (error instanceof AxiosError) {
-                if (error.response?.status === 400) {
-                    setError('Бинго с таким ID не найдено')
-                    return false
-                }
-                if (error.response?.status === 404) {
-                    setError('Ошибка сервера')
-                    return false
-                }
-            }
-        }
-        finally {
-            setFetching(false)
-        }
 
-    }
 
     function handleInput(event: ChangeEvent<HTMLInputElement>) {
         if (event.target.value.length > 0) setButtonDisabled(false)
@@ -52,16 +25,26 @@ function JoinToBingo() {
         if (!inputValue.current) return false
         const id = parseInt(inputValue.current.value)
         if (isNaN(id)) return false
+        setFetching(true)
         getBingo(id).then(data => {
             if (!data) return false
             console.log(data)
-            navigator(`${id}`, {
+            navigator(`/bingo/${id}`, {
                 state: {
                     bingoTemplate: data.values
                 }
             })
         })
-            .catch(console.log)
+            .catch(error => {
+                if (error instanceof AxiosError) {
+                    console.log(error)
+                    if(error.response?.status === 400) setError('Бинго с таким ID не найдено!')
+                    if(error.response?.status === 404) setError('Ошибка сервера!')
+                }
+            })
+            .finally(() => {
+                setFetching(false)
+            })
 
     }
 

@@ -8,7 +8,7 @@ function Header() {
                 <LinksList>
                     <li><LinkedNavText to={'/'}>Главная</LinkedNavText></li>
                     <li><LinkedNavText to={'/create'}>Создать новое бинго!</LinkedNavText></li>
-                    <li><LinkedNavText to={'/bingo'}>Поучаствовать</LinkedNavText></li>
+                    <li><LinkedNavText to={'/join'}>Поучаствовать</LinkedNavText></li>
                 </LinksList>
             </Navigation>
         </Container>

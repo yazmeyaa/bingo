@@ -9,7 +9,7 @@ function Router() {
         <Routes>
             <Route index element={<Landing />} />
             <Route path='create' element={<CreateNewBingo />} />
-            <Route path='bingo' element={<JoinToBingo />} />
+            <Route path='join' element={<JoinToBingo />} />
             <Route path='bingo/:id' element={<Bingo />}/> 
         </Routes>
     )

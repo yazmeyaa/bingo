@@ -1,5 +1,6 @@
-import { useState } from "react"
-import { Location, useLocation } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { Location, useLocation, useNavigate } from "react-router-dom"
+import getBingo from "tools/getBingo"
 import { BingoField, BingoItem, PageContainer } from "./styles"
 
 interface LocationWithState extends Location {
@@ -8,9 +9,32 @@ interface LocationWithState extends Location {
     }
 }
 
+
 function Bingo() {
+    const [bingoValues, setBingoValues] = useState<string[]>([])
     const location = useLocation() as LocationWithState
-    const [bingoValues, setBingoValues] = useState<string[]>(location.state.bingoTemplate)
+    const navigator = useNavigate()
+
+    useEffect(() => {
+        console.log(location.state)
+
+        if (location.state === null) {
+            const id = location.pathname.split('/')
+            console.log(id[id.length - 1])
+            getBingo(parseInt(id[id.length - 1]))
+                .then(data => {
+                    setBingoValues(data.values)
+                })
+                .catch(() => {
+                    navigator('/join')
+                })
+            return;
+        }
+        if(location.state)
+            setBingoValues(location.state.bingoTemplate)
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     return (
         <PageContainer>
             <BingoTemplate values={bingoValues} />
