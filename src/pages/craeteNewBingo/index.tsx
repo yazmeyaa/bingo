@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useRef, useState, FormEvent, FunctionComponent, createContext, useEffect, useContext, memo } from "react"
+import { AddNewCardButton, NewCardForm, Input, CardButton, CardContainer, Container, CreatedCardsContainer, ButtonsContainer } from "./styles"
 
 
 interface ContextType {
@@ -41,7 +42,10 @@ function CreateNewBingo() {
     }
 
     function editCard(text: string, id: number) {
-        setBingos(() => bingos.map(item => item.id === id ? { ...item, text } : item))
+        setBingos(() => {
+            if (!text) return bingos
+            return bingos.map(item => item.id === id ? { ...item, text } : item)
+        })
     }
 
     function saveBingo() {
@@ -52,7 +56,7 @@ function CreateNewBingo() {
                 'Content-type': 'application/json'
             },
             data: JSON.stringify({ template: bingos.map(item => item.text) })
-        }).then(console.log)
+        })
     }
 
     const context = {
@@ -61,45 +65,52 @@ function CreateNewBingo() {
     }
 
     return (
-        <div>
+        <Container>
             <CardsContext.Provider value={context}>
-                <form onSubmit={addCard}>
-                    <input ref={inputRef} />
-                    <button type='submit'> Добавить новое поле</button>
-                </form>
-                <div>
+                <NewCardForm onSubmit={addCard}>
+                    <Input ref={inputRef} />
+                    <AddNewCardButton type='submit'> Добавить новое поле</AddNewCardButton>
+                </NewCardForm>
+                <CreatedCardsContainer>
                     {bingos.map((item) => <SingleBingoCard key={item.id} id={item.id} text={item.text} />)}
-                </div>
+                </CreatedCardsContainer>
             </CardsContext.Provider>
-            <button onClick={() => { saveBingo() }}>Сохранить бинго!</button>
-        </div>
+            {bingos.length > 0 && <button onClick={() => { saveBingo() }}>Сохранить бинго!</button>}
+        </Container>
     )
 }
 
-const SingleBingoCard: FunctionComponent<CardType> = memo(({ text, id }) => {
+const SingleBingoCard: FunctionComponent<CardType> = memo((props) => {
     const [edit, setEdit] = useState<boolean>(false)
+
 
     const changeMode = () => setEdit(prev => !prev)
 
 
-    return edit ?
-        <EditCard text={text} id={id} changeMode={changeMode} /> : (
-            <div>
-                <span>{text}</span>
-                <button onClick={() => setEdit(prev => !prev)}>
-                    Редактировать
-                </button>
-                <button>Удалить</button>
-            </div>
-        )
+    return edit ? <EditCard {...props} changeMode={changeMode} /> : <IdleCard changeMode={changeMode} {...props} />
 })
 
-
-interface EditProps extends CardType {
+interface PartiedCardProps extends CardType {
     changeMode: () => void
 }
 
-const EditCard: FunctionComponent<EditProps> = memo(({ id, text, changeMode }) => {
+const IdleCard: FunctionComponent<PartiedCardProps> = memo(({ id, text, changeMode }) => {
+    const { removeCard } = useContext(CardsContext)
+    return (
+        <CardContainer>
+            <span>{text}</span>
+            <ButtonsContainer>
+                <CardButton onClick={changeMode}>
+                    Редактировать
+                </CardButton>
+                <CardButton onClick={() => { removeCard(id) }}>Удалить</CardButton>
+            </ButtonsContainer>
+        </CardContainer>
+    )
+})
+
+
+const EditCard: FunctionComponent<PartiedCardProps> = memo(({ id, text, changeMode }) => {
     const { editCard } = useContext(CardsContext)
     const input = useRef<HTMLInputElement>(null)
     useEffect(() => {
@@ -107,16 +118,21 @@ const EditCard: FunctionComponent<EditProps> = memo(({ id, text, changeMode }) =
         input.current.value = text
     }, [text])
 
+    function handleSumbit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault()
+        if (!input.current) return;
+        editCard(input.current.value, id)
+        changeMode()
+    }
+
     return (
-        <div>
+        <CardContainer onSubmit={handleSumbit}>
             <input ref={input}></input>
-            <button onClick={() => {
-                if (!input.current) return;
-                editCard(input.current.value, id)
-                changeMode()
-            }}>Сохранить</button>
-            <button onClick={() => changeMode()}>Отменить</button>
-        </div>
+            <ButtonsContainer>
+                <CardButton type='submit'>Сохранить</CardButton>
+                <CardButton onClick={() => changeMode()}>Отменить</CardButton>
+            </ButtonsContainer>
+        </CardContainer>
     )
 })
 

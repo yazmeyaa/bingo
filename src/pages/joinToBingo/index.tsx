@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios"
+import { AxiosError } from "axios"
 import { ChangeEvent, FormEvent, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import getBingo from "tools/getBingo"
@@ -28,7 +28,6 @@ function JoinToBingo() {
         setFetching(true)
         getBingo(id).then(data => {
             if (!data) return false
-            console.log(data)
             navigator(`/bingo/${id}`, {
                 state: {
                     bingoTemplate: data.values
@@ -37,9 +36,8 @@ function JoinToBingo() {
         })
             .catch(error => {
                 if (error instanceof AxiosError) {
-                    console.log(error)
-                    if(error.response?.status === 400) setError('Бинго с таким ID не найдено!')
-                    if(error.response?.status === 404) setError('Ошибка сервера!')
+                    if (error.response?.status === 400) setError('Бинго с таким ID не найдено!')
+                    if (error.response?.status === 404) setError('Ошибка сервера!')
                 }
             })
             .finally(() => {

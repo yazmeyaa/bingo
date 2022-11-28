@@ -16,11 +16,8 @@ function Bingo() {
     const navigator = useNavigate()
 
     useEffect(() => {
-        console.log(location.state)
-
         if (location.state === null) {
             const id = location.pathname.split('/')
-            console.log(id[id.length - 1])
             getBingo(parseInt(id[id.length - 1]))
                 .then(data => {
                     setBingoValues(data.values)

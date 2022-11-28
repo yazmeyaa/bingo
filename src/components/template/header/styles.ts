@@ -11,6 +11,7 @@ export const Container = styled.header`
         gap: 8px;
         background-color: papayawhip;
         margin-bottom: 1rem;
+        width: 100%;
     }
 `
 
