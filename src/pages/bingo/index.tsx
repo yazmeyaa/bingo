@@ -27,7 +27,7 @@ function Bingo() {
                 })
             return;
         }
-        if(location.state)
+        if (location.state)
             setBingoValues(location.state.bingoTemplate)
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -43,10 +43,14 @@ interface BingoFieldProps {
     values: string[]
 }
 
+
 function BingoTemplate(props: BingoFieldProps) {
-    const Field = props.values.map((item, index) => <BingoItem key={index}>{item}</BingoItem>)
+
+    const Field = props.values.map((item, index) => {
+        return <BingoItem key={index}>{item}</BingoItem>
+    })
     return (
-        <BingoField >
+        <BingoField>
             {Field}
         </BingoField>
     )
