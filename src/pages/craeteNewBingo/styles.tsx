@@ -38,25 +38,28 @@ export const AddNewCardButton = styled.button`
 
 export const CreatedCardsContainer = styled.div`
     &{
-        display: flex;
-        flex-wrap: wrap;
-        gap: 4px;
+        width: fit-content;
+        flex: 1 1 auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(1fr);
+        grid-column-gap: 6px;
+        grid-row-gap: 6px;
     }
 `
 
 export const CardContainer = styled.form`
     &{
-        box-sizing: border-box;
         flex: 1 0 33%;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         box-sizing: border-box;
         padding: 1rem 5px;
         border: 2px solid black;
         transition: ease-out 0.5sec;
-        flex-direction: column;
-        gap: 12px;
+        aspect-ratio: 1;
     }
     &>span{
         word-wrap: break-word;

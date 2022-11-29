@@ -72,7 +72,7 @@ function CreateNewBingo() {
                     <AddNewCardButton type='submit'> Добавить новое поле</AddNewCardButton>
                 </NewCardForm>
                 <CreatedCardsContainer>
-                    {bingos.map((item) => <SingleBingoCard key={item.id} id={item.id} text={item.text} />)}
+                    { bingos.length > 0 ? bingos.map((item) => <SingleBingoCard key={item.id} id={item.id} text={item.text} />) : <h1>Ни одной карточки ещё не добавлено ¯\_(ツ)_/¯</h1>}
                 </CreatedCardsContainer>
             </CardsContext.Provider>
             {bingos.length > 0 && <button onClick={() => { saveBingo() }}>Сохранить бинго!</button>}
