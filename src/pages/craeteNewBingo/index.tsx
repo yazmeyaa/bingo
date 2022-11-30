@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useRef, useState, FormEvent, FunctionComponent, createContext, useEffect, useContext, memo } from "react"
+import { useNavigate } from "react-router-dom"
 import { AddNewCardButton, NewCardForm, Input, CardButton, CardContainer, Container, CreatedCardsContainer, ButtonsContainer } from "./styles"
 
 
@@ -20,6 +21,7 @@ interface CardType {
 function CreateNewBingo() {
     const [bingos, setBingos] = useState<CardType[]>([])
     const inputRef = useRef<HTMLInputElement>(null)
+    const navigate = useNavigate()
 
     function addCard(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
@@ -49,7 +51,15 @@ function CreateNewBingo() {
     }
 
     function saveBingo() {
-        axios({
+
+        type ResponseData = {
+            bingo: {
+                id: number;
+                values: string[];
+            }
+        }
+
+        axios<ResponseData>({
             url: `${process.env.REACT_APP_BACKEND_URL}/create`,
             method: 'post',
             headers: {
@@ -57,6 +67,10 @@ function CreateNewBingo() {
             },
             data: JSON.stringify({ template: bingos.map(item => item.text) })
         })
+            .then(response => {
+                if (response.status !== 200) throw new Error('Произошла ошибка во время обработки запроса!')
+                navigate(`success?id=${response.data.bingo.id}`)
+            })
     }
 
     const context = {
@@ -71,8 +85,9 @@ function CreateNewBingo() {
                     <Input ref={inputRef} />
                     <AddNewCardButton type='submit'> Добавить новое поле</AddNewCardButton>
                 </NewCardForm>
+                {bingos.length <= 0 ? <h1>Ни одной карточки ещё не добавлено ¯\_(ツ)_/¯</h1> : null}
                 <CreatedCardsContainer>
-                    { bingos.length > 0 ? bingos.map((item) => <SingleBingoCard key={item.id} id={item.id} text={item.text} />) : <h1>Ни одной карточки ещё не добавлено ¯\_(ツ)_/¯</h1>}
+                    {bingos.map((item) => <SingleBingoCard key={item.id} id={item.id} text={item.text} />)}
                 </CreatedCardsContainer>
             </CardsContext.Provider>
             {bingos.length > 0 && <button onClick={() => { saveBingo() }}>Сохранить бинго!</button>}

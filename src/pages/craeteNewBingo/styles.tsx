@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import fluidTypography from 'tools/fluidTypography'
 
 export const Container = styled.main`
     &{
@@ -43,15 +44,17 @@ export const CreatedCardsContainer = styled.div`
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         grid-template-rows: repeat(1fr);
-        grid-column-gap: 6px;
-        grid-row-gap: 6px;
+        grid-column-gap: 12px;
+        grid-row-gap: 12px;
     }
 `
 
 export const CardContainer = styled.form`
     &{
         flex: 1 0 33%;
+        font-size: ${fluidTypography(320, 1920, 18, 24)};
         display: flex;
+        border-radius: 8px;
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -60,6 +63,26 @@ export const CardContainer = styled.form`
         border: 2px solid black;
         transition: ease-out 0.5sec;
         aspect-ratio: 1;
+        background-color: #ffedd7;
+        max-width: 500px;
+        word-wrap: break-word;
+        word-break: break-all;
+        box-shadow: 6px 6px 12px 6px rgba(0, 0, 0, 0.1);
+        transition: ease-in 0.2;
+        gap: 24px;
+
+        @keyframes create {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        animation-name: create;
+        animation-duration: 0.4s;
+        animation-fill-mode: both;
+
     }
     &>span{
         word-wrap: break-word;
@@ -69,15 +92,19 @@ export const CardContainer = styled.form`
 export const ButtonsContainer = styled.div`
     &{
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-around;
-        gap: 24px;
+        gap: 6px;
+        word-break: keep-all;
+        @media only screen and (min-width: 1000px) {
+            flex-direction: row;
+        }
     }
 `
 
 export const CardButton = styled.button`
     &{
-
+        padding: 8px;
     }
 `
 
