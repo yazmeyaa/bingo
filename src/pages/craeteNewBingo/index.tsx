@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useRef, useState, FormEvent, FunctionComponent, createContext, useEffect, useContext, memo } from "react"
 import { useNavigate } from "react-router-dom"
-import { AddNewCardButton, NewCardForm, Input, CardButton, CardContainer, Container, CreatedCardsContainer, ButtonsContainer } from "./styles"
+import { AddNewCardButton, NewCardForm, Input, CardButton, CardContainer, Container, CreatedCardsContainer, ButtonsContainer, EditInput } from "./styles"
 
 
 interface ContextType {
@@ -142,7 +142,7 @@ const EditCard: FunctionComponent<PartiedCardProps> = memo(({ id, text, changeMo
 
     return (
         <CardContainer onSubmit={handleSumbit}>
-            <input ref={input}></input>
+            <EditInput ref={input}></EditInput>
             <ButtonsContainer>
                 <CardButton type='submit'>Сохранить</CardButton>
                 <CardButton onClick={() => changeMode()}>Отменить</CardButton>

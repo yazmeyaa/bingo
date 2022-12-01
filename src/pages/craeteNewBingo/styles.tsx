@@ -56,17 +56,16 @@ export const CardContainer = styled.form`
         display: flex;
         border-radius: 8px;
         flex-direction: column;
-        justify-content: center;
+        justify-content: space-evenly;
         align-items: center;
         box-sizing: border-box;
-        padding: 1rem 5px;
         border: 2px solid black;
         transition: ease-out 0.5sec;
         aspect-ratio: 1;
         background-color: #ffedd7;
         max-width: 500px;
         word-wrap: break-word;
-        word-break: break-all;
+        word-break: keep-all;
         box-shadow: 6px 6px 12px 6px rgba(0, 0, 0, 0.1);
         transition: ease-in 0.2;
         gap: 24px;
@@ -91,10 +90,10 @@ export const CardContainer = styled.form`
 
 export const ButtonsContainer = styled.div`
     &{
+        width: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        gap: 6px;
         word-break: keep-all;
         @media only screen and (min-width: 1000px) {
             flex-direction: row;
@@ -102,9 +101,23 @@ export const ButtonsContainer = styled.div`
     }
 `
 
+export const EditInput = styled.input`
+    &{
+        background-color: transparent;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+
+    }
+`
+
 export const CardButton = styled.button`
     &{
         padding: 8px;
+        width: 50%;
+        background-color: transparent;
+        border: 1px solid red;
+    }
+    &:hover{
+
     }
 `
 
